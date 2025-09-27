@@ -392,7 +392,7 @@ function buildFsUi(){
   // شريط تلميح مبسّط للايماءات (اختياري)
   const hint = document.createElement('div');
   hint.className = 'fs-hint';
-  hint.textContent = 'اسحب للتقليب. انقر لإظهار الأدوات.';
+  hint.textContent = ' اسحب الصفحات للتقليب بين طيات المجلة';
   div.appendChild(hint);
 
   fsUiContainer = div;
