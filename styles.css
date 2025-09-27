@@ -43,8 +43,6 @@
   --text-a:#9f3b2a; /* اللون الأول للنص */
   --text-b:#702414; /* اللون الثاني للنص */
   --muted:#d5c4bd;
-  /* مسافة الحواشي الجانبية أثناء ملء الشاشة */
-  --fs-gutter: clamp(12px, 5vw, 64px);
 }
 
 *{box-sizing:border-box}
@@ -430,6 +428,25 @@ html { scroll-behavior: smooth; }
   border-top: 1px solid rgba(255,255,255,.12);
 }
 
+/* عدّاد الزوار فوق الشريط السفلي للتذييل */
+.app-footer.fancy .visitor-stats{
+  width: 85%;
+  margin: 0px auto 0.7rem;
+  position: relative; z-index: 1;
+  text-align: center;
+  color: #f3e8e2;
+  opacity: 0.7;
+  font-size: 1em;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: baseline;
+  font-size: 1rem;
+}
+.app-footer.fancy .visitor-stats strong{
+  color: #f3e8e2;
+}
+
 @media (min-width: 621px){
   /* في الشاشات الكبيرة: ضع تابعنا تحت نبذة في نفس العمود، والتواصل في عمود جانبي */
   .app-footer.fancy .footer-inner{
@@ -630,13 +647,17 @@ body.modal-open{
   margin: 0 !important; 
   border-radius: 0 !important; 
   box-shadow: none !important; 
+  /* خلفية زجاجية خفيفة مشابهة لـ .overline */
+  background: rgba(255, 255, 255);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding-top: env(safe-area-inset-top, 0px);
-  padding-right: calc(env(safe-area-inset-right, 0px) + var(--fs-gutter));
+  padding-right: env(safe-area-inset-right, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  padding-left: calc(env(safe-area-inset-left, 0px) + var(--fs-gutter));
+  padding-left: env(safe-area-inset-left, 0px);
 }
 .page-flip:-webkit-full-screen,
 #book:-webkit-full-screen{ 
@@ -645,6 +666,11 @@ body.modal-open{
   margin: 0 !important; 
   border-radius: 0 !important; 
   box-shadow: none !important; 
+  /* خلفية زجاجية خفيفة مشابهة لـ .overline */
+  background: white;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -672,14 +698,18 @@ body.fs-fallback-open{
   margin: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-  background: transparent; /* بدون خلفية سوداء */
+  /* خلفية زجاجية خفيفة مشابهة لـ .overline */
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.18);
   display: flex;
   align-items: center;
   justify-content: center;
   padding-top: env(safe-area-inset-top, 0px);
-  padding-right: calc(env(safe-area-inset-right, 0px) + var(--fs-gutter));
+  padding-right: env(safe-area-inset-right, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  padding-left: calc(env(safe-area-inset-left, 0px) + var(--fs-gutter));
+  padding-left: env(safe-area-inset-left, 0px);
 }
 .fs-fallback-target .page-flip{
   width: 100% !important;
