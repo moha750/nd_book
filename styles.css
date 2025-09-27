@@ -1,0 +1,724 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: Saudi;
+}
+
+/* لوحة الألوان */
+/* ربط خط Saudi */
+@font-face{
+  font-family: 'Saudi';
+  src: url('fonts/Saudi-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: 'Saudi';
+  src: url('fonts/Saudi-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: 'Saudi';
+  src: url('fonts/Saudi-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: 'Saudi';
+  src: url('fonts/Saudi-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root{
+  --primary:#d3624c; /* برتقالي محمّر */
+  --secondary:#9f3b2a; /* خمري */
+  --accent:#702414; /* بني غامق */
+  --bg:#d3624c; /* خلفية بلون ثابت حسب طلب المستخدم */
+  --text-a:#9f3b2a; /* اللون الأول للنص */
+  --text-b:#702414; /* اللون الثاني للنص */
+  --muted:#d5c4bd;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: 'Saudi', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--text-a);
+  /* خلفية متدرجة غنية مع توهج علوي خفيف */
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--primary) 35%, #000 65%),
+      color-mix(in oklab, var(--accent) 55%, #000 45%)
+    );
+  position: relative;
+  min-height: 100%;
+  isolation: isolate; /* لضمان أن طبقة النمط تبقى خلف المحتوى */
+}
+
+/* طبقة زخرفية دقيقة فوق الخلفية لإضفاء نسيج بسيط دون تشتيت */
+body::before{
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url('pattern1.png');
+  background-repeat: repeat;
+  background-size: 260px 260px;
+  opacity: .07;
+  pointer-events: none;
+}
+
+/* بديل متوافق عند عدم دعم color-mix */
+@supports not (background: color-mix(in oklab, red 50%, blue 50%)){
+  body{
+    background:
+      radial-gradient(1000px 500px at 50% -20%, rgba(255,255,255,.14), rgba(255,255,255,0) 60%),
+      linear-gradient(180deg, #b14e3b, #5a1b0f);
+  }
+}
+
+/* سلوك تمرير سلس للروابط داخل الصفحة */
+html { scroll-behavior: smooth; }
+
+.app-header{
+  text-align:center;
+  padding: 0px 16px 8px;
+}
+.app-header h1{
+  margin:0 0 6px;
+  color: #fff;
+  letter-spacing: .5px;
+}
+
+/* بطل الصفحة (Hero) */
+.hero{
+  position: relative;
+  overflow: hidden;
+  padding: 3rem 1rem 5rem;
+  background:
+    radial-gradient(1200px 600px at 50% -20%, rgba(255,255,255,.18), rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, color-mix(in oklab, var(--primary) 45%, #000 55%), color-mix(in oklab, var(--primary) 25%, #000 75%));
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.hero::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('pattern3.png');
+  background-repeat: repeat;
+  background-size: 320px 320px;
+  background-position: center 0; /* توسيط أفقيًا مع بدء الحركة من الأعلى */
+  opacity: .12;
+  pointer-events: none;
+  /* تحريك الباترن عموديًا في حلقة */
+  animation: heroPatternScroll 30s linear infinite;
+  will-change: background-position;
+}
+.hero-inner{
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "art"
+    "content";
+  align-items: center;
+  gap: 28px;
+}
+.hero-content{ grid-area: content; text-align: center; padding: 8px 0; }
+.hero-art{ grid-area: art; display:flex; align-items:center; justify-content:center; }
+.hero-art img{ width: 22rem; height: auto; display:block; filter: drop-shadow(0 16px 40px rgba(0,0,0,.28)); border-radius: 16px }
+
+/* عناوين فرعية وزخرفة نصية */
+.overline{
+  display:inline-block;
+  font-weight:600;
+  letter-spacing:.6px;
+  color:#fff;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 6px 12px;
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15) inset, 0 2px 6px rgba(0,0,0,0.08);
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+.app-header h1{ font-size: clamp(1.4rem, 2.6vw + 0.8rem, 2.4rem); line-height: 1.35; }
+.app-header h1{ color: #fff; }
+
+/* دوران/تبديل السطر الثاني في العنوان مع تلاشي ناعم */
+.app-header .rotating{
+  display: inline-block;
+  position: relative;
+  overflow: hidden; /* إخفاء الانزلاق خارج السطر */
+  min-width: 8ch; /* لضمان ثبات العرض تقريبًا أثناء التبديل */
+}
+#hero-rotator{
+  display: inline-block;
+  will-change: transform, opacity;
+  transition: transform .45s ease, opacity .45s ease;
+  transform: translateY(0);
+  opacity: 1;
+}
+/* يخرج لأعلى */
+#hero-rotator.slide-out{ transform: translateY(-60%); opacity: 0; }
+/* وضعية أولية للدخول من أسفل قبل إزالة هذه الكلاس مباشرة */
+#hero-rotator.pre-slide-in{ transform: translateY(60%); opacity: 0; }
+
+.hero-actions{ display:flex; gap:10px; flex-wrap: wrap; justify-content:center }
+.btn.lg{ padding: 12px 22px; font-size: 1.02rem; }
+
+/* استجابة للشاشات الصغيرة */
+@media (max-width: 900px){
+  .hero-inner{ grid-template-columns: 1fr; gap: 16px; }
+  .app-header h1{ font-size: clamp(1.3rem, 3.2vw + 0.7rem, 2rem); }
+}
+
+/* حركة الباترن: من أعلى إلى أسفل بشكل متواصل */
+@keyframes heroPatternScroll{
+  0%{ background-position: center 0; }
+  100%{ background-position: center 320px; }
+}
+
+@media (max-width: 500px) {
+  .hero-art img {
+    width: 16rem;
+  }
+}
+
+/* فاصل بين الهيرو والحاوية باستخدام pattern4 */
+.section-divider{
+  width: 100%;
+  height: 120px;              /* ارتفاع أكبر للفاصل */
+  margin-block: -60px;         /* نصفه في الأعلى ونصفه في الأسفل */
+  background-image: url('pattern4.png');
+  background-repeat: repeat-x; /* التكرار أفقيًا مع حركة من اليمين لليسار */
+  background-size: auto 85px; /* ملاءمة الارتفاع الجديد */
+  background-position: 0 center; /* ضبط نقطة البداية أفقيًا */
+  position: relative;
+  z-index: 2;                  /* يظهر فوق الأقسام المجاورة */
+  pointer-events: none;        /* لا يعطّل النقر على العناصر */
+  animation: dividerPatternScroll 30s linear infinite; /* حركة هادئة مثل الهيرو */
+  will-change: background-position;
+}
+
+@media (max-width: 620px){
+  .section-divider{
+    height: 80px;
+    margin-block: -40px;
+    background-size: auto 80px;
+  }
+}
+
+/* حركة الباترن للفاصل: من اليمين لليسار بشكل متواصل */
+@keyframes dividerPatternScroll{
+  0%{ background-position: 0 center; }
+  100%{ background-position: -320px center; }
+}
+
+.container{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 6rem 1rem;
+}
+
+.uploader{
+  border: 2px dashed color-mix(in oklab, var(--secondary) 60%, #fff 0%);
+  border-radius: 18px;
+  padding: 32px;
+  text-align:center;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  outline: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 10px 30px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.25);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .08s ease, background-color .2s ease;
+}
+.uploader.dragover{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.10));
+  border-color: color-mix(in oklab, var(--primary) 75%, #fff 0%);
+  box-shadow: 0 14px 38px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.28);
+  transform: scale(1.01);
+}
+
+.preview{
+  margin-top: 22px;
+  display:flex;
+  justify-content:center;
+}
+#canvas{
+  width: min(100%, 520px);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  display:block;
+  background:
+    radial-gradient(60% 60% at 50% 40%, rgba(255,255,255,.45), rgba(255,255,255,0) 70%),
+    color-mix(in oklab, var(--muted) 88%, #fff 12%);
+  border-radius: 50%;
+  border: 2px solid color-mix(in oklab, var(--accent) 35%, #fff 65%);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,.25),
+    inset 0 2px 10px rgba(0,0,0,.08);
+}
+
+.actions{
+  flex-direction: row-reverse;
+  margin-top: 16px;
+  display:flex;
+  gap: 12px;
+  align-items:center;
+  justify-content:center;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.20);
+}
+
+.btn{
+  cursor:pointer;
+  border:none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight:600;
+  letter-spacing:.3px;
+  color: #fff;
+  transition: transform .06s ease, filter .2s ease, background-color .2s;
+  background-color: #983828;
+  text-decoration: none;
+}
+.btn:disabled{
+  opacity:.6;cursor:not-allowed;
+}
+.btn.primary{ background: var(--primary); }
+.btn.primary:hover{ filter:brightness(1.05) }
+
+.btn.accent{ background: var(--primary); }
+.btn.accent:hover{ filter:brightness(1.05) }
+
+.status{ color: var(--muted); min-height: 1.4em; }
+
+.notes{
+  margin-top: 20px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--secondary) 10%, #000 90%);
+  outline: 1px solid rgba(255,255,255,.05);
+}
+.notes h2{ margin: 6px 0 10px; color: var(--text-b) }
+.notes code{ color: var(--primary); background: rgba(255,255,255,.06); padding: 2px 6px; border-radius: 6px }
+
+.app-footer{
+  text-align:center;
+  color: var(--text-b);
+  padding: 18px 16px 32px;
+}
+.app-footer .footer-top{ display:flex; flex-direction: column; align-items:center; gap: 10px; }
+.app-footer .made-with-love{ font-weight: 600; color: var(--text-b); }
+.app-footer .social{ list-style:none; display:flex; gap:12px; padding:0; margin: 6px 0 0; flex-wrap: wrap; justify-content:center }
+.app-footer .social a{ display:flex; align-items:center; gap:6px; padding: 6px 10px; border-radius: 999px; color: #fff; background: color-mix(in oklab, var(--secondary) 80%, #000 20%); text-decoration: none; font-size: .92rem; }
+.app-footer .social a:hover{ filter: brightness(1.05); }
+.app-footer .footer-bottom{ display:flex; gap: 12px; justify-content:center; align-items:center; margin-top: 10px; flex-wrap: wrap; }
+.app-footer .footer-bottom small{ color: var(--muted); }
+
+/* نسخة احترافية مع باترن وخلفية متدرّجة */
+.app-footer.fancy{
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem 0 0;
+  color: #fff;
+  text-align: initial;
+  background:
+    radial-gradient(1000px 500px at 50% -10%, rgba(255,255,255,.16), rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, color-mix(in oklab, var(--primary) 40%, #000 60%), color-mix(in oklab, var(--accent) 65%, #000 35%));
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.app-footer.fancy .footer-pattern{
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url('pattern2.png');
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  opacity: .10;
+  pointer-events: none;
+  animation: footerPatternScroll 40s linear infinite;
+}
+@keyframes footerPatternScroll{
+  0%{ background-position: center 0; }
+  100%{ background-position: center 300px; }
+}
+.footer-inner {
+  padding: 4rem 1rem 2rem;
+}
+.app-footer.fancy .footer-inner{
+  position: relative; z-index: 1;
+  display: grid;
+  gap: 18px 22px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  align-items: start;
+}
+.app-footer.fancy .footer-brand{ grid-area: brand; }
+.app-footer.fancy .footer-social{ grid-area: social; }
+.app-footer.fancy .footer-contact{ grid-area: contact; }
+.app-footer.fancy .contact-form{ display:flex; flex-direction: column; gap:8px; margin-top: 6px }
+.app-footer.fancy .contact-form .row{ display:flex; gap:8px; flex-wrap: wrap }
+.app-footer.fancy .contact-form input,
+.app-footer.fancy .contact-form textarea{
+  flex:1 1 200px;
+  min-width: 0;
+  border-radius: 12px;
+  border:1px solid rgba(255,255,255,.25);
+  padding: 10px 12px;
+  background: rgba(255,255,255,.12);
+  color:#fff;
+  outline:none;
+}
+.app-footer.fancy .contact-form textarea{ resize: vertical; max-height: 220px }
+.app-footer.fancy .contact-form input::placeholder,
+.app-footer.fancy .contact-form textarea::placeholder{ color: #eee }
+.app-footer.fancy .contact-form .btn{ align-self: flex-start }
+.app-footer.fancy .footer-brand .brand-mark{ width: 15rem; height: auto; display:block; filter: drop-shadow(0 6px 20px rgba(0,0,0,.25)); border-radius: 10px; margin-bottom: 8px }
+.app-footer.fancy .footer-brand p{ color: #f7efe9; margin: 6px 0 }
+.app-footer.fancy h3{ margin: 6px 0 10px; font-size: 1.05rem; color: #fff }
+.app-footer.fancy .footer-links ul{ list-style:none; padding:0; margin:0; display:grid; gap:6px }
+.app-footer.fancy .footer-links a{ color: #fff; text-decoration:none; opacity:.9 }
+.app-footer.fancy .footer-links a:hover{ opacity:1; text-decoration: underline }
+.app-footer.fancy .social{ list-style:none; padding:0; margin: 8px 0 0; display:flex; gap:10px; flex-wrap: wrap }
+.app-footer.fancy .social a{
+  font-size: 1.2rem;
+  display:inline-flex; align-items:center; justify-content:center;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  color:#fff;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.28);
+  text-decoration:none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.25);
+  transition: transform .15s ease, filter .2s ease, background-color .2s ease, border-color .2s ease;
+}
+.app-footer.fancy .social a:hover{ transform: translateY(-2px); background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.4) }
+.app-footer.fancy .social a:focus-visible{ outline: 2px solid #fff; outline-offset: 3px }
+.app-footer.fancy .footer-news p{ color:#f7efe9; margin: 6px 0 10px }
+.app-footer.fancy .subscribe{ display:flex; gap:8px; flex-wrap: wrap }
+.app-footer.fancy .subscribe input{ flex:1 1 220px; min-width: 0; border-radius: 999px; border:1px solid rgba(255,255,255,.25); padding: 10px 12px; background: rgba(255,255,255,.12); color:#fff; outline:none }
+.app-footer.fancy .subscribe input::placeholder{ color: #eee }
+.app-footer.fancy .footer-bottom{
+  width: 85%;
+  margin: 0 auto;
+  position: relative; z-index: 1;
+  padding: 1.2rem 0;
+  text-align: center;
+  color: #f3e8e2;
+  border-top: 1px solid rgba(255,255,255,.12);
+}
+
+@media (min-width: 621px){
+  /* في الشاشات الكبيرة: ضع تابعنا تحت نبذة في نفس العمود، والتواصل في عمود جانبي */
+  .app-footer.fancy .footer-inner{
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "brand contact"
+      "social contact";
+  }
+}
+@media (max-width: 620px){
+  .app-footer.fancy{ padding: 28px 0 0px; text-align: center; }
+  .app-footer.fancy .footer-inner{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "brand"
+      "contact"
+      "social";
+  }
+  .app-footer.fancy .footer-brand .brand-mark{ margin-inline: auto; }
+  .app-footer.fancy .social{ justify-content: center; }
+  .app-footer.fancy .contact-form{ width: 100%; align-items: stretch; }
+  .app-footer.fancy .contact-form .btn{ align-self: center; }
+}
+
+/* تناوب مبسط للنصوص بين اللونين */
+h1, h2, h3, h4, strong { color: var(--text-b); }
+.container p { color: var(--text-a); }
+.container p + p { color: var(--text-b); }
+.notes ul li:nth-child(odd) { color: var(--text-a); }
+.notes ul li:nth-child(even) { color: var(--text-b); }
+
+/* نافذة القص */
+.modal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal.show{ display: flex; }
+.modal .modal-backdrop{
+  position: absolute; inset: 0;
+  background: color-mix(in oklab, var(--secondary) 22%, rgba(0,0,0,.62) 78%);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+/* عند فتح أي نافذة منبثقة امنع تمرير الصفحة */
+body.modal-open{
+  overflow: hidden;
+  touch-action: none;
+}
+.modal .modal-content{
+  position: relative;
+  width: min(94vw, 880px);
+  max-height: 90vh;
+  background: linear-gradient(180deg, #ffffff, #fbf7f4);
+  color: #222;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 16px 48px rgba(0,0,0,.32);
+  display: flex; flex-direction: column;
+}
+
+/* حركة دخول خفيفة للمودال */
+.modal.show .modal-content{ animation: modalPop .18s ease-out; }
+@keyframes modalPop{ from{ transform: scale(.98); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+.modal-title{
+  margin: 0; padding: 12px 16px;
+  background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 92%, #000 8%), color-mix(in oklab, var(--primary) 80%, #000 20%));
+  color: #fff; font-size: 1.05rem; font-weight: 600; letter-spacing: .2px;
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,.06);
+}
+
+/* خيارات المشاركة في نافذة المشاركة */
+.share-options{
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+.share-row{ display:flex; gap:10px; justify-content:center; flex-wrap: wrap }
+.share-copy{ display:flex; justify-content:center }
+.share-options .btn{ font-size: .95rem; display:inline-flex; align-items:center; gap:6px }
+.share-options .btn .icon{ display:inline-flex; line-height: 0 }
+
+@media (max-width: 420px){
+  .share-row{ gap:8px }
+  .share-options .btn{ padding: 8px 12px }
+}
+.cropper-wrap{
+  position: relative;
+  flex: 1;
+  min-height: 320px;
+  /* خلفية شطرنجية لإبراز الشفافية داخل مساحة القص */
+  background-color: #d5c4bd;
+  background-image:
+    linear-gradient(45deg, rgba(255,255,255,0.6) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.6) 75%, rgba(255,255,255,0.6)),
+    linear-gradient(45deg, rgba(255,255,255,0.6) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.6) 75%, rgba(255,255,255,0.6));
+  background-position: 0 0, 10px 10px;
+  background-size: 20px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#cropper-image{ max-width: 100%; max-height: 70vh; display:block }
+.modal-actions{
+  display:flex; gap:10px; justify-content:center; padding: 12px 16px;
+  background: linear-gradient(180deg, #faf7f5, #f6f1ee);
+  border-top: 1px solid rgba(0,0,0,.08);
+}
+.modal-actions .btn{ box-shadow: 0 6px 18px rgba(0,0,0,.12) }
+.modal-actions .btn:hover{ transform: translateY(-1px) }
+.modal-actions .btn:focus-visible{ outline: 2px solid var(--primary); outline-offset: 2px }
+
+/* تنسيق نظيف لهيكل نافذة المشاركة */
+.modal-body{ padding: 14px 16px; }
+.share-intro{ margin: 0 0 10px; color: #444; }
+.copy-hint{ display:block; margin-top:8px; color:#777 }
+
+.cropper-toolbar{
+  display:flex; align-items:center; gap:8px; padding: 10px 12px;
+  background: linear-gradient(180deg, #faf7f5, #f3eeeb);
+  border-bottom: 1px solid rgba(0,0,0,.08);
+}
+.cropper-toolbar .sep{ width:1px; height:20px; background:#ddd; display:inline-block }
+.cropper-toolbar .btn{
+  background: #f0e9e6; color: var(--text-b);
+  border: 1px solid rgba(0,0,0,.08);
+}
+.cropper-toolbar .btn:hover{ background: #ece2de }
+.cropper-toolbar .btn:focus-visible{ outline: 2px solid var(--primary); outline-offset: 2px }
+
+/* جعل منطقة القص دائرية بصريًا في Cropper.js */
+.cropper-view-box,
+.cropper-face{
+  border-radius: 50% !important;
+}
+.cropper-view-box{
+  outline: 2px solid var(--accent);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.25) inset;
+}
+
+.follow {
+  text-align: center;
+}
+
+/* شريط تقدم علوي عام لعمليات الإرسال */
+.progress-bar{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: transparent;
+  z-index: 2000;
+  display: none;
+}
+.progress-bar.show{ display: block; }
+.progress-bar .bar{
+  position: absolute; top: 0; left: 0; height: 100%; width: 30%;
+  background: linear-gradient(90deg, color-mix(in oklab, var(--primary) 85%, #fff 15%), var(--primary));
+  box-shadow: 0 0 10px color-mix(in oklab, var(--primary) 80%, #000 20%);
+  animation: progressIndeterminate 1.2s ease-in-out infinite;
+}
+@keyframes progressIndeterminate{
+  0%{ transform: translateX(-30%); }
+  50%{ transform: translateX(50%); }
+  100%{ transform: translateX(130%); }
+}
+
+/* ——— تنسيقات خفيفة للكُتيّب المضمّن ——— */
+#book-embed { 
+  padding-block: 2rem; 
+}
+#book { 
+  width: min(100%, 1100px); 
+  margin: 0 auto; 
+}
+/* أخفِ قائمة الصفحات المصدرية بعد أن يقرأها PageFlip */
+#holidayList { display: none; }
+/* حواف وظل لعنصر PageFlip الناتج */
+.page-flip { 
+  margin-inline: auto; 
+  border-radius: 14px; 
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  overflow: hidden;
+}
+
+/* شريط أدوات تحت الكُتيّب */
+.book-toolbar{ display:flex; justify-content:center; margin-top: 10px; }
+.book-toolbar .btn{ background: var(--primary); }
+
+/* أنماط ملء الشاشة لعنصر صفحة الكتيّب */
+.page-flip:fullscreen,
+#book:fullscreen{ 
+  width: 100vw !important; 
+  height: 100vh !important; 
+  margin: 0 !important; 
+  border-radius: 0 !important; 
+  box-shadow: none !important; 
+}
+.page-flip:-webkit-full-screen,
+#book:-webkit-full-screen{ 
+  width: 100vw !important; 
+  height: 100vh !important; 
+  margin: 0 !important; 
+  border-radius: 0 !important; 
+  box-shadow: none !important; 
+}
+
+/* تأكد أن الحاوية تسمح بالتمدد الكامل */
+#book:fullscreen .page-flip{ width:100% !important; height:100% !important; }
+#book:-webkit-full-screen .page-flip{ width:100% !important; height:100% !important; }
+
+/* ——— وضع ملء الشاشة البديل (Fallback) لأجهزة iOS والمتصفحات التي لا تدعم Fullscreen API ——— */
+body.fs-fallback-open{
+  overflow: hidden;
+  touch-action: none;
+}
+.fs-fallback-target{
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  width: 100vw !important;
+  height: calc(var(--vh, 1vh) * 100) !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: #000; /* خلفية سوداء لمظهر مقارب لملء الشاشة */
+}
+.fs-fallback-target .page-flip{
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ——— عناصر واجهة ملء الشاشة المحسّنة ——— */
+.fs-ui{
+  position: fixed;
+  top: env(safe-area-inset-top, 0px);
+  right: env(safe-area-inset-right, 0px);
+  left: env(safe-area-inset-left, 0px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px 12px;
+  z-index: 10000; /* فوق محتوى الكتاب */
+  pointer-events: none; /* لا تعطل تفاعلات الكتاب */
+  transition: opacity .25s ease;
+}
+.fs-ui.hidden{ opacity: 0; }
+.fs-ui:not(.hidden){ opacity: 1; }
+.fs-close-btn{
+  pointer-events: auto; /* فعّل النقر على الزر فقط */
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  width: 42px;
+  height: 42px;
+  font-size: 18px;
+  line-height: 42px;
+  text-align: center;
+  color: #fff;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 6px 18px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
+}
+.fs-close-btn:active{ transform: scale(0.98); }
+.fs-hint{
+  pointer-events: none;
+  margin-inline-start: auto;
+  margin-inline-end: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #f2f2f2;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.18);
+  font-size: .9rem;
+}
+
+/* إخفاء عناصر خارج منطقة الكتاب أثناء الملء لزيادة التركيز */
+body.fs-active .hero,
+body.fs-active .section-divider,
+body.fs-active .app-footer{ display: none !important; }
+body.fs-active #book-embed{ padding-block: 0 !important; }
+/* عند تعطّل JS اعرض الصور كمصغرات لائقة */
+#holidayList .holiday-item { 
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 10px; 
+  overflow: hidden; 
+  margin-bottom: 12px; 
+}
+#holidayList img { width: 100%; display: block; }
