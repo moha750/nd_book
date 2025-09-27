@@ -819,6 +819,16 @@ successBackdrop?.addEventListener('click', closeSuccessModal);
 // ——— عدّاد الزوار وتسجيل الزيارات ———
 const visitorCountEl = document.getElementById('visitor-count');
 
+// شاشة التحميل: دالة إخفاء وإزالة
+const loadingOverlay = document.getElementById('loading-overlay');
+function hideLoadingOverlay(){
+  try{
+    if (!loadingOverlay) return;
+    loadingOverlay.classList.add('hide');
+    setTimeout(() => { try{ loadingOverlay.remove(); }catch(_){} }, 420);
+  }catch(_){ /* تجاهل */ }
+}
+
 function getOrCreateVisitorId(){
   try{
     let id = localStorage.getItem('visitor_id');
@@ -862,29 +872,17 @@ async function logVisit(){
 async function refreshVisitorCount(){
   if (!isSupabaseConfigured() || !visitorCountEl) return;
   const client = getSupabaseClient();
-  // حاول أولاً عدّ الزوّار الفريدين
+  // عدّ إجمالي الزيارات من جدول visits فقط
   try{
-    const { count: uniqueCount, error } = await client
-      .from('visitors')
-      .select('*', { count: 'exact', head: true });
-    if (error) throw error;
-    if (typeof uniqueCount === 'number'){
-      visitorCountEl.textContent = uniqueCount.toLocaleString('ar-EG');
-      return;
-    }
-  }catch(_){ /* تجاهل إن لم يوجد الجدول */ }
-
-  // بديل: عدّ إجمالي الزيارات
-  try{
-    const { count: totalVisits, error: vErr } = await client
+    const { count: totalVisits, error } = await client
       .from('visits')
       .select('*', { count: 'exact', head: true });
-    if (vErr) throw vErr;
+    if (error) throw error;
     if (typeof totalVisits === 'number'){
       visitorCountEl.textContent = totalVisits.toLocaleString('ar-EG');
       return;
     }
-  }catch(_){ /* تجاهل */ }
+  }catch(_){ /* تجاهل أي أخطاء */ }
 
   // في حال الفشل
   visitorCountEl.textContent = '—';
@@ -895,5 +893,12 @@ async function refreshVisitorCount(){
   try{
     await logVisit();
     await refreshVisitorCount();
+    // بعد اكتمال التهيئة أخفِ شاشة التحميل
+    hideLoadingOverlay();
   }catch(_){ /* تجاهل */ }
 })();
+
+// كخطة احتياطية: إخفاء شاشة التحميل عند اكتمال تحميل الصفحة
+window.addEventListener('load', () => {
+  try { hideLoadingOverlay(); } catch(_) {}
+}, { once: true });

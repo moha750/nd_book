@@ -775,3 +775,34 @@ body.fs-active #book-embed{ padding-block: 0 !important; }
   margin-bottom: 12px; 
 }
 #holidayList img { width: 100%; display: block; }
+
+/* ——— شاشة تحميل كاملة ——— */
+#loading-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(1000px 500px at 50% -10%, rgba(255,255,255,.16), rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, color-mix(in oklab, var(--primary) 40%, #000 60%), color-mix(in oklab, var(--accent) 65%, #000 35%));
+  color: #fff;
+  transition: opacity .3s ease, visibility .3s ease;
+}
+#loading-overlay .loading-content{ 
+  text-align: center; 
+  display:flex; flex-direction: column; align-items:center; gap: 12px;
+}
+#loading-overlay .loading-logo{ width: 120px; height: auto; filter: drop-shadow(0 10px 28px rgba(0,0,0,.28)); border-radius: 12px }
+#loading-overlay .loading-text{ color: #f7efe9; font-size: 1rem; opacity: .9 }
+#loading-overlay .spinner{
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,.25);
+  border-top-color: #fff;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin{ to { transform: rotate(360deg) } }
+
+#loading-overlay.hide{ opacity: 0; visibility: hidden; }
